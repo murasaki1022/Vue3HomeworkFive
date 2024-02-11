@@ -18,6 +18,11 @@ const userModal = {
       this.productModal.hide();
     },
   },
+  watch: {
+    tempProduct() {
+      this.qty = 1;
+    },
+  },
   mounted() {
     this.productModal = new bootstrap.Modal(this.$refs.modal);
   },
@@ -115,6 +120,32 @@ const app = Vue.createApp({
             });
           Swal.fire({
             title: "已刪除成功",
+            icon: "success",
+          });
+        }
+      });
+    },
+    deleteCartAll() {
+      Swal.fire({
+        title: "確定清空購物車?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "確定",
+        cancelButtonText: "取消",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios
+            .delete(`${apiUrl}/v2/api/${apiPath}/carts`)
+            .then((res) => {
+              this.getCart();
+            })
+            .catch((err) => {
+              console.log(err.data.message);
+            });
+          Swal.fire({
+            title: "已清空購物車",
             icon: "success",
           });
         }
