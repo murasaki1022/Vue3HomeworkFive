@@ -1,3 +1,19 @@
+//驗證規則
+Object.keys(VeeValidateRules).forEach((rule) => {
+  if (rule !== "default") {
+    VeeValidate.defineRule(rule, VeeValidateRules[rule]);
+  }
+});
+
+// 讀取外部的資源
+VeeValidateI18n.loadLocaleFromURL("./zh_TW.json");
+
+// Activate the locale
+VeeValidate.configure({
+  generateMessage: VeeValidateI18n.localize("zh_TW"),
+  validateOnInput: true, // 調整為：輸入文字時，就立即進行驗證
+});
+
 const apiUrl = `https://vue3-course-api.hexschool.io`;
 const apiPath = `langyuanstore`;
 
@@ -37,6 +53,15 @@ const app = Vue.createApp({
       status: {
         addCartLoading: "",
         changeCartNumLoading: "",
+      },
+      form: {
+        user: {
+          name: "",
+          email: "",
+          tel: "",
+          address: "",
+        },
+        message: "",
       },
     };
   },
@@ -140,16 +165,41 @@ const app = Vue.createApp({
             .delete(`${apiUrl}/v2/api/${apiPath}/carts`)
             .then((res) => {
               this.getCart();
+              Swal.fire({
+                title: "已清空購物車",
+                icon: "success",
+              });
             })
             .catch((err) => {
-              console.log(err.data.message);
+              Swal.fire({
+                icon: "error",
+                title: err.data.message,
+              });
             });
-          Swal.fire({
-            title: "已清空購物車",
-            icon: "success",
-          });
         }
       });
+    },
+    onSubmit() {
+      const userOrder = this.form;
+      axios
+        .post(`${apiUrl}/v2/api/${apiPath}/order`, { data: userOrder })
+        .then((res) => {
+          Swal.fire(res.data.message);
+          this.$refs.form.resetForm();
+          this.getCart();
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: err.data.message,
+          });
+        });
+    },
+    isPhone(value) {
+      const phoneNumber = /^(09)[0-9]{8}$/;
+      return phoneNumber.test(value)
+        ? true
+        : "請輸入09開頭，共10碼的正確的電話號碼";
     },
   },
   components: {
@@ -160,5 +210,7 @@ const app = Vue.createApp({
     this.getCart();
   },
 });
-
+app.component("VForm", VeeValidate.Form);
+app.component("VField", VeeValidate.Field);
+app.component("ErrorMessage", VeeValidate.ErrorMessage);
 app.mount("#app");
