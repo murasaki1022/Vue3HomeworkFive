@@ -17,10 +17,28 @@
       integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
       crossorigin="anonymous"
     />
+    <link
+      href="
+https://cdn.jsdelivr.net/npm/vue-loading-overlay@6.0.3/dist/css/index.min.css
+"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="loading.css" />
   </head>
-
   <body>
     <div id="app">
+      <loading
+        v-model:active="isLoading"
+        :can-cancel="true"
+        :on-cancel="onCancel"
+        :is-full-page="fullPage"
+      >
+        <div class="loadingio-spinner-ripple-64xhhn6i6r6">
+          <div class="ldio-aeq8wza18cr">
+            <div></div>
+            <div></div>
+          </div></div
+      ></loading>
       <div class="container">
         <div class="mt-4">
           <!-- 產品Modal -->
@@ -312,6 +330,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@vee-validate/rules@4.12.4/dist/vee-validate-rules.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@vee-validate/i18n@4.12.4/dist/vee-validate-i18n.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="
+    https://cdn.jsdelivr.net/npm/vue-loading-overlay@6.0.3/dist/index.min.js
+    "></script>
     <script src="cart.js" type="module"></script>
   </body>
 </html>

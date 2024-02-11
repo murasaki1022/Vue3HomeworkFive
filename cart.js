@@ -47,6 +47,7 @@ const userModal = {
 const app = Vue.createApp({
   data() {
     return {
+      isLoading: true,
       products: [],
       tempProduct: {},
       carts: {},
@@ -71,6 +72,7 @@ const app = Vue.createApp({
         .get(`${apiUrl}/v2/api/${apiPath}/products/all`)
         .then((res) => {
           this.products = res.data.products;
+          this.isLoading = false;
         })
         .catch((err) => {
           console.log(err.data.message);
@@ -213,4 +215,5 @@ const app = Vue.createApp({
 app.component("VForm", VeeValidate.Form);
 app.component("VField", VeeValidate.Field);
 app.component("ErrorMessage", VeeValidate.ErrorMessage);
+app.component("loading", VueLoading.Component);
 app.mount("#app");
